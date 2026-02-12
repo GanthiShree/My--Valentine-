@@ -1,1 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Valentine 💘</title>
+
+<style>
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: #ffe6f0;
+  overflow: hidden;
+}
+
+h1, h2, h3 {
+  color: #ff3366;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 10px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.yes { background: #ff4d88; color: white; }
+.no { background: #999; color: white; position: absolute; }
+
+.option { background: #ff99bb; color: white; }
+
+.hidden { display: none; }
+
+#reaction {
+  font-size: 22px;
+  margin-top: 20px;
+  color: red;
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<h1 id="mainQ">Chandru, Will you be my Valentine? 💖</h1>
+
+<button class="yes" onclick="startQuestions()">Yes 💘</button>
+<button class="no" id="noBtn">No 🙈</button>
+
+<div id="quiz" class="hidden">
+  <h2 id="questionText"></h2>
+  <div id="options"></div>
+  <div id="reaction"></div>
+</div>
+
+<script>
+
+// ✏️ EDIT ONLY THIS SECTION FOR QUESTIONS
+const questions = [
+  { question: "When is our first date? 😏", answer: "Saturday" },
+  { question: "Chocolate or Ice Cream? 🍫🍦", answer: "Chocolate" },
+  { question: "Are you ready to tolerate Shree forever? 😂", answer: "Yes" }
+];
+
+let currentQuestion = 0;
+
+// 💨 No Button Runs Away
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.top = Math.random() * window.innerHeight + "px";
+  noBtn.style.left = Math.random() * window.innerWidth + "px";
+});
+
+// 💖 Start Questions + Play Music
+function startQuestions() {
+  document.getElementById("bgMusic").play();
+  document.getElementById("mainQ").classList.add("hidden");
+  document.querySelector(".yes").classList.add("hidden");
+  document.querySelector(".no").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  loadQuestion();
+}
+
+// 📌 Load Question
+function loadQuestion() {
+  let q = questions[currentQuestion];
+  document.getElementById("questionText").innerText = q.question;
+  document.getElementById("reaction").innerText = "";
+
+  let optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  let generatedOptions = generateOptions(q.answer);
+
+  generatedOptions.forEach(option => {
+    let btn = document.createElement("button");
+    btn.innerText = option;
+    btn.className = "option";
+    btn.onclick = () => checkAnswer(option);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+// 🎲 Generate Related Wrong Answers
+function generateOptions(correct) {
+  let options = [correct];
+
+  while (options.length < 4) {
+    let wrong = generateRelated(correct);
+    if (!options.includes(wrong)) {
+      options.push(wrong);
+    }
+  }
+
+  return shuffle(options);
+}
+
+function generateRelated(correct) {
+  if (correct.toLowerCase() === "yes") return "No";
+  if (correct.toLowerCase() === "chocolate") return "Ice Cream";
+  if (correct.toLowerCase() === "saturday") return "Monday";
+  return correct + " maybe";
+}
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+// ✅ Check Answer
+function checkAnswer(selected) {
+  let correct = questions[currentQuestion].answer;
+
+  if (selected === correct) {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      loadQuestion();
+    } else {
+      document.getElementById("quiz").innerHTML =
+        "<h2>Officially My Valentine 💕🎉</h2><h3>You passed all levels 😌</h3>";
+    }
+  } else {
+    let reaction = document.getElementById("reaction");
+    reaction.innerText = "😤 Wrong answer! Think properly mister!";
+    reaction.classList.add("shake");
+    setTimeout(() => reaction.classList.remove("shake"), 400);
+  }
+}
+
+</script>
+
+</body>
+</html>
 
