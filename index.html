@@ -43,8 +43,6 @@
 
 <body>
 
-<h1 id="mainTitle">Answer these honestly </h1>
-
 <div id="quiz"></div>
 <div id="reaction"></div>
 
@@ -91,6 +89,7 @@ function loadQuestion() {
   let q = questions[currentQuestion];
 
   document.getElementById("quiz").innerHTML = `
+    <h1>Answer these honestly 😌</h1>
     <h2>${q.question}</h2>
     <button onclick="checkAnswer('Yes ❤️')">Yes ❤️</button>
     <button id="noBtn"
@@ -132,15 +131,14 @@ function checkAnswer(selected) {
 }
 
 function showFinalPage() {
-   // Hide the main heading
-  document.getElementById("mainTitle").style.display = "none";
-  
+
   // 🎵 Play music after user interaction
   let music = document.getElementById("bgMusic");
   music.play().catch(() => {
     document.body.addEventListener("click", () => music.play(), { once: true });
   });
 
+  // Replace entire quiz content with final page
   document.getElementById("quiz").innerHTML = `
     <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
       <h2 style="text-align:center;">To My Forever ❤️</h2>
