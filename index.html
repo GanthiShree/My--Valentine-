@@ -10,6 +10,7 @@
       text-align: center;
       background: #ffe6f0;
       padding: 20px;
+      overflow-x: hidden;
     }
 
     #quiz {
@@ -25,6 +26,7 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
+      position: relative;
     }
 
     button:hover {
@@ -36,18 +38,6 @@
       font-weight: bold;
       color: red;
     }
-
-    .shake {
-      animation: shake 0.4s;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
-    }
   </style>
 </head>
 
@@ -58,75 +48,112 @@
 <div id="quiz"></div>
 <div id="reaction"></div>
 
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-  const questions = [
-    { question: "Do you like surprises? 😏", options: ["Yes", "No"], answer: "Yes" },
-    { question: "Do you enjoy talking to me? 😌", options: ["Yes", "No"], answer: "Yes" },
-    { question: "Should I ask something important now? 💖", options: ["Yes", "No"], answer: "Yes" }
-  ];
-
-  let currentQuestion = 0;
-
-  function loadQuestion() {
-    let q = questions[currentQuestion];
-    let quizDiv = document.getElementById("quiz");
-
-    quizDiv.innerHTML = "";
-    document.getElementById("reaction").innerText = "";
-
-    let questionEl = document.createElement("h2");
-    questionEl.innerText = q.question;
-    quizDiv.appendChild(questionEl);
-
-    q.options.forEach(option => {
-      let btn = document.createElement("button");
-      btn.innerText = option;
-      btn.onclick = function() {
-        checkAnswer(option);
-      };
-      quizDiv.appendChild(btn);
-    });
+const questions = [
+  {
+    question: "If we had to start all over again… would you still choose me? 💍",
+    answer: "Yes ❤️"
+  },
+  {
+    question: "Do you feel lucky you married me? 😌",
+    answer: "Yes ❤️"
+  },
+  {
+    question: "Are we the cutest couple you know? 🥰",
+    answer: "Yes ❤️"
+  },
+  {
+    question: "Will you hold my hand even when we’re 70? 👵👴",
+    answer: "Yes ❤️"
   }
+];
 
-  function checkAnswer(selected) {
-    let correct = questions[currentQuestion].answer;
+let currentQuestion = 0;
 
-    if (selected === correct) {
-      currentQuestion++;
+let noMessages = [
+  "You will regret this 😤",
+  "Think again 😏",
+  "I'll cry 🥺",
+  "Really sure? 😶",
+  "Don’t break my heart 💔",
+  "Last chance 😌",
+  "Choose wisely mister 😎"
+];
 
-      if (currentQuestion < questions.length) {
-        loadQuestion();
-      } else {
-        showFinalMessage();
-      }
+let noIndex = 0;
 
+function loadQuestion() {
+  let q = questions[currentQuestion];
+
+  document.getElementById("quiz").innerHTML = `
+    <h2>${q.question}</h2>
+    <button onclick="checkAnswer('Yes ❤️')">Yes ❤️</button>
+    <button id="noBtn"
+            onmouseover="moveNoButton()"
+            onclick="moveNoButton()">
+      No 😜
+    </button>
+  `;
+
+  document.getElementById("reaction").innerText = "";
+}
+
+function moveNoButton() {
+  let button = document.getElementById("noBtn");
+
+  button.innerText = noMessages[noIndex];
+  noIndex = (noIndex + 1) % noMessages.length;
+
+  let x = Math.random() * (window.innerWidth - 150);
+  let y = Math.random() * (window.innerHeight - 150);
+
+  button.style.position = "absolute";
+  button.style.left = x + "px";
+  button.style.top = y + "px";
+}
+
+function checkAnswer(selected) {
+  let correct = questions[currentQuestion].answer;
+
+  if (selected === correct) {
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+      loadQuestion();
     } else {
-      let reaction = document.getElementById("reaction");
-      reaction.innerText = "😤 Wrong answer! Think properly mister!";
-      reaction.classList.add("shake");
-      setTimeout(() => reaction.classList.remove("shake"), 400);
+      showFinalPage();
     }
   }
+}
 
-  function showFinalMessage() {
-    document.getElementById("quiz").innerHTML = `
-      <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
-        <h2 style="text-align:center;">Hey You ❤️</h2>
+function showFinalPage() {
 
-        <p>I don’t know if this message will surprise you… or make you smile… but I hope it does both.</p>
+  // 🎵 Play music after user interaction
+  let music = document.getElementById("bgMusic");
+  music.play().catch(() => {
+    document.body.addEventListener("click", () => music.play(), { once: true });
+  });
 
-        <p>You’re that “random smile” for me.</p>
+  document.getElementById("quiz").innerHTML = `
+    <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
+      <h2 style="text-align:center;">To My Forever ❤️</h2>
 
-        <p>So here I am, doing something a little brave.</p>
+      <p>Even if life gave us another beginning… I would still choose you.</p>
+      <p>Not once. Not twice. But in every lifetime.</p>
+      <p>Growing old with you… Laughing with you… Holding your hand even at 70… That’s all I want.</p>
+      <p>I don’t just love you. I choose you. Every single day.</p>
 
-        <p>Will you be my Valentine? 💖</p>
+      <p style="text-align:right;">– Ganthishree ✨</p>
+    </div>
+  `;
+}
 
-        <p style="text-align:right;">– Ganthishree ✨</p>
-      </div>
-    `;
-  }
-
-  loadQuestion();
+loadQuestion();
 </script>
 
 </body>
