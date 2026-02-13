@@ -43,7 +43,7 @@
 
 <body>
 
-<h1>Answer these honestly 😌</h1>
+<h1 id="mainTitle">Answer these honestly </h1>
 
 <div id="quiz"></div>
 <div id="reaction"></div>
@@ -132,7 +132,9 @@ function checkAnswer(selected) {
 }
 
 function showFinalPage() {
-
+   // Hide the main heading
+  document.getElementById("mainTitle").style.display = "none";
+  
   // 🎵 Play music after user interaction
   let music = document.getElementById("bgMusic");
   music.play().catch(() => {
