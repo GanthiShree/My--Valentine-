@@ -10,6 +10,7 @@
       text-align: center;
       background: #ffe6f0;
       padding: 20px;
+      overflow-x: hidden;
     }
 
     #quiz {
@@ -25,15 +26,24 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
+      transition: 0.3s;
     }
 
     button:hover {
       background-color: #e6005c;
+      transform: scale(1.05);
     }
 
-    #reaction {
-      margin-top: 15px;
-      font-weight: bold;
+    .heart {
+      position: fixed;
+      font-size: 20px;
+      animation: floatUp 3s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-300px); opacity: 0; }
     }
 
     .shake {
@@ -55,125 +65,143 @@
 <h1>Answer these honestly 😌</h1>
 
 <div id="quiz"></div>
-<div id="reaction"></div>
 
 <audio id="bgMusic" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  const questions = [
-    {
-      question: "Do you like surprises? 😏",
-      options: ["Yes", "No"],
-      answer: "Yes"
-    },
-    {
-      question: "Do you enjoy talking to me? 😌",
-      options: ["Yes", "No"],
-      answer: "Yes"
-    },
-    {
-      question: "Should I ask something important now? 💖",
-      options: ["Yes", "No"],
-      answer: "Yes"
-    }
-  ];
 
-  let currentQuestion = 0;
+const questions = [
+  { question: "If we had to start all over again… would you still choose me? 💍", answer: "Yes ❤️" },
+  { question: "Do you feel lucky you married me? 😌", answer: "Yes ❤️" },
+  { question: "Are we the cutest couple you know? 🥰", answer: "Yes ❤️" },
+  { question: "Will you hold my hand even when we’re 70? 👵👴", answer: "Yes ❤️" }
+];
 
-  function loadQuestion() {
-    let q = questions[currentQuestion];
+let currentQuestion = 0;
 
-    let html = `
-      <h2>${q.question}</h2>
-      ${q.options.map(option =>
-        `<button onclick="checkAnswer('${option}')">${option}</button>`
-      ).join("")}
-    `;
+let noMessages = [
+  "You will regret this 😤",
+  "Think again 😏",
+  "I'll cry 🥺",
+  "Really sure? 😶",
+  "Don’t break my heart 💔",
+  "Last chance 😌",
+  "Choose wisely mister 😎"
+];
 
-    document.getElementById("quiz").innerHTML = html;
-    document.getElementById("reaction").innerText = "";
+let noIndex = 0;
+
+function loadQuestion() {
+  let q = questions[currentQuestion];
+
+  document.getElementById("quiz").innerHTML = `
+    <h2>${q.question}</h2>
+    <button onclick="checkAnswer('Yes ❤️')">Yes ❤️</button>
+    <button id="noBtn"
+            onmouseover="moveNoButton()"
+            onclick="moveNoButton()">
+      No 😜
+    </button>
+  `;
+}
+
+function moveNoButton() {
+  let button = document.getElementById("noBtn");
+
+  button.innerText = noMessages[noIndex];
+  noIndex = (noIndex + 1) % noMessages.length;
+
+  let x = Math.random() * (window.innerWidth - 150);
+  let y = Math.random() * (window.innerHeight - 150);
+
+  button.style.position = "absolute";
+  button.style.left = x + "px";
+  button.style.top = y + "px";
+}
+
+function createHearts() {
+  for (let i = 0; i < 15; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💖";
+
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight - 50 + "px";
+    heart.style.fontSize = (20 + Math.random() * 20) + "px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 3000);
   }
+}
 
-  function checkAnswer(selected) {
-    let correct = questions[currentQuestion].answer;
+function checkAnswer(selected) {
+  let correct = questions[currentQuestion].answer;
 
-    if (selected === correct) {
-      currentQuestion++;
+  if (selected === correct) {
 
-      if (currentQuestion < questions.length) {
-        loadQuestion();
-      } else {
+    createHearts(); // 💖 floating hearts
 
-        // 🎵 Play music on final page
-        let music = document.getElementById("bgMusic");
-        music.play().catch(() => {
-          document.body.addEventListener("click", () => music.play(), { once: true });
-        });
+    currentQuestion++;
 
-        // 💌 Final Romantic Letter
-        document.getElementById("quiz").innerHTML = `
-          <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
-            
-            <h2 style="text-align:center;">Hey You ❤️</h2>
-
-            <p>
-            I don’t know if this email will surprise you… or make you smile… but I hope it does both.
-            </p>
-
-            <p>
-            Some people enter our life loudly.<br>
-            Some enter silently… and slowly become the reason behind random smiles.
-            </p>
-
-            <p>
-            You’re that “random smile” for me.
-            </p>
-
-            <p>
-            It’s funny how normal conversations turned into something I wait for.<br>
-            How simple “hi” became the best part of my day.<br>
-            How your name on my screen suddenly feels… special.
-            </p>
-
-            <p>
-            So here I am, doing something a little brave.
-            </p>
-
-            <p>
-            If life was a playlist, I think you’d be my favorite song.<br>
-            If days were chapters, you’d be the one I reread.
-            </p>
-
-            <p>
-            And if this little message finds the right place in your heart…<br>
-            Will you be my Valentine? 💖
-            </p>
-
-            <p>
-            No pressure.<br>
-            No drama.<br>
-            Just honest feelings.
-            </p>
-
-            <p style="text-align:right;">
-            – Ganthishree ✨
-            </p>
-
-          </div>
-        `;
-      }
-
+    if (currentQuestion < questions.length) {
+      setTimeout(loadQuestion, 600);
     } else {
-      let reaction = document.getElementById("reaction");
-      reaction.innerText = "😤 Wrong answer! Think properly mister!";
-      reaction.classList.add("shake");
-      setTimeout(() => reaction.classList.remove("shake"), 400);
+      showFinalPage();
     }
   }
+}
 
-  loadQuestion();
+function showFinalPage() {
+
+  let music = document.getElementById("bgMusic");
+  music.play().catch(() => {
+    document.body.addEventListener("click", () => music.play(), { once: true });
+  });
+
+  document.getElementById("quiz").innerHTML = `
+    <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
+      
+      <h2 style="text-align:center;">To My Forever ❤️</h2>
+
+      <p>
+      Even if life gave us another beginning…
+      I would still choose you.
+      </p>
+
+      <p>
+      Not once.
+      Not twice.
+      But in every lifetime.
+      </p>
+
+      <p>
+      Growing old with you…
+      Laughing with you…
+      Holding your hand even at 70…
+      That’s all I want.
+      </p>
+
+      <p>
+      I don’t just love you.
+      I choose you.
+      Every single day.
+      </p>
+
+      <p style="text-align:right;">
+      – Your Always ❤️
+      </p>
+
+    </div>
+  `;
+}
+
+loadQuestion();
+
 </script>
 
 </body>
