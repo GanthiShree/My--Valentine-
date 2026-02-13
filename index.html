@@ -74,9 +74,9 @@
 
 const questions = [
   { question: "If we had to start all over again… would you still choose me? 💍", answer: "Yes ❤️" },
-  { question: "Do you feel lucky you married me? 😌", answer: "Yes ❤️" },
-  { question: "Are we the cutest couple you know? 🥰", answer: "Yes ❤️" },
-  { question: "Will you hold my hand even when we’re 70? 👵👴", answer: "Yes ❤️" }
+  { question: "Do you feel lucky you married me? 😌", answer: "Yes 💙" },
+  { question: "Are we the cutest couple you know? 🥰", answer: "Yes 💙" },
+  { question: "Will you hold my hand even when we’re 70? 👵👴", answer: "Yes 💙" }
 ];
 
 let currentQuestion = 0;
@@ -98,7 +98,7 @@ function loadQuestion() {
 
   document.getElementById("quiz").innerHTML = `
     <h2>${q.question}</h2>
-    <button onclick="checkAnswer('Yes ❤️')">Yes ❤️</button>
+    <button onclick="checkAnswer('Yes 💙')">Yes 💙</button>
     <button id="noBtn"
             onmouseover="moveNoButton()"
             onclick="moveNoButton()">
@@ -125,7 +125,7 @@ function createHearts() {
   for (let i = 0; i < 15; i++) {
     let heart = document.createElement("div");
     heart.className = "heart";
-    heart.innerText = "💖";
+    heart.innerText = "💕";
 
     heart.style.left = Math.random() * window.innerWidth + "px";
     heart.style.top = window.innerHeight - 50 + "px";
@@ -144,7 +144,7 @@ function checkAnswer(selected) {
 
   if (selected === correct) {
 
-    createHearts(); // 💖 floating hearts
+    createHearts(); // 💕 floating hearts
 
     currentQuestion++;
 
@@ -166,7 +166,7 @@ function showFinalPage() {
   document.getElementById("quiz").innerHTML = `
     <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
       
-      <h2 style="text-align:center;">To My Forever ❤️</h2>
+      <h2 style="text-align:center;">To My Forever 💙</h2>
 
       <p>
       Even if life gave us another beginning…
@@ -193,7 +193,7 @@ function showFinalPage() {
       </p>
 
       <p style="text-align:right;">
-      – Your Always ❤️
+      – Ganthishree 💙
       </p>
 
     </div>
