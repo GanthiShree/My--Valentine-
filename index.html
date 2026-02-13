@@ -4,7 +4,7 @@
   <title>My Forever 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Romantic Google Font -->
+  <!-- Romantic Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 
   <style>
@@ -14,7 +14,7 @@
       font-family: 'Poppins', sans-serif;
       text-align: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
       background-size: 400% 400%;
       animation: gradientBG 10s ease infinite;
       overflow-x: hidden;
@@ -29,7 +29,7 @@
 
     h1 {
       font-weight: 500;
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     #quiz {
@@ -42,6 +42,7 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      position: relative;
     }
 
     button {
@@ -79,7 +80,6 @@
       text-align: right;
       margin-top: 20px;
     }
-
   </style>
 </head>
 
@@ -89,6 +89,7 @@
 
 <div id="quiz"></div>
 
+<!-- MUSIC (Make sure music.mp3 is in same folder) -->
 <audio id="bgMusic" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -96,10 +97,10 @@
 <script>
 
 const questions = [
-  { question: "If we had to start all over again… would you still choose me? 💍", answer: "Yes ❤️" },
-  { question: "Do you feel lucky you married me? 😌", answer: "Yes ❤️" },
-  { question: "Are we the cutest couple you know? 🥰", answer: "Yes ❤️" },
-  { question: "Will you hold my hand even when we’re 70? 👵👴", answer: "Yes ❤️" }
+  "If we had to start all over again… would you still choose me? 💍",
+  "Do you feel lucky you married me? 😌",
+  "Are we the cutest couple you know? 🥰",
+  "Will you hold my hand even when we’re 70? 👵👴"
 ];
 
 let currentQuestion = 0;
@@ -119,17 +120,26 @@ let noIndex = 0;
 function loadQuestion() {
   window.scrollTo(0, 0);
 
-  let q = questions[currentQuestion];
-
   document.getElementById("quiz").innerHTML = `
-    <h2>${q.question}</h2>
-    <button onclick="checkAnswer('Yes ❤️')">Yes ❤️</button>
+    <h2>${questions[currentQuestion]}</h2>
+    <button onclick="yesClick()">Yes ❤️</button>
     <button id="noBtn"
             onmouseover="moveNoButton()"
             onclick="moveNoButton()">
       No 😜
     </button>
   `;
+}
+
+function yesClick() {
+  createHearts();
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+    loadQuestion();
+  } else {
+    showFinalPage();
+  }
 }
 
 function moveNoButton() {
@@ -179,68 +189,6 @@ function startFinalHearts() {
   }, 300);
 }
 
-function checkAnswer(selected) {
-  let correct = questions[currentQuestion].answer;
-
-  if (selected === correct) {
-
-    createHearts();
-    currentQuestion++;
-
-    if (currentQuestion < questions.length) {
-      loadQuestion();
-    } else {
-      showFinalPage();
-    }
-  }
-}
-
 function showFinalPage() {
 
-  let music = document.getElementById("bgMusic");
-  music.play().catch(() => {
-    document.body.addEventListener("click", () => music.play(), { once: true });
-  });
-
-  startFinalHearts();
-
-  document.getElementById("quiz").innerHTML = `
-    <h2 style="font-family:'Dancing Script', cursive; font-size:36px;">
-      To My Forever ❤️
-    </h2>
-
-    <p>
-    Even if life gave us another beginning…
-    I would still choose you.
-    </p>
-
-    <p>
-    Not once. Not twice.
-    But in every lifetime.
-    </p>
-
-    <p>
-    Growing old with you…
-    Laughing with you…
-    Holding your hand even at 70…
-    That’s all I want.
-    </p>
-
-    <p>
-    I don’t just love you.
-    I choose you.
-    Every single day.
-    </p>
-
-    <div class="signature">
-      – Ganthishree ✨
-    </div>
-  `;
-}
-
-loadQuestion();
-
-</script>
-
-</body>
-</html>
+  let music = document.getElementById("bg
