@@ -1,74 +1,180 @@
-function checkAnswer(selected) {
-  let correct = questions[currentQuestion].answer;
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Valentine 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  if (selected === correct) {
-    currentQuestion++;
-
-    if (currentQuestion < questions.length) {
-      loadQuestion();
-    } else {
-
-      // 🎵 Play music only on final page
-      let music = document.getElementById("bgMusic");
-      music.play();
-
-      // 💌 Final Romantic Letter Page
-      document.getElementById("quiz").innerHTML = `
-        <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
-        
-        <h2 style="text-align:center;">Hey You ❤️</h2>
-
-        <p>
-        I don’t know if this email will surprise you… or make you smile… but I hope it does both.
-        </p>
-
-        <p>
-        Some people enter our life loudly.<br>
-        Some enter silently… and slowly become the reason behind random smiles.
-        </p>
-
-        <p>
-        You’re that “random smile” for me.
-        </p>
-
-        <p>
-        It’s funny how normal conversations turned into something I wait for.<br>
-        How simple “hi” became the best part of my day.<br>
-        How your name on my screen suddenly feels… special.
-        </p>
-
-        <p>
-        So here I am, doing something a little brave.
-        </p>
-
-        <p>
-        If life was a playlist, I think you’d be my favorite song.<br>
-        If days were chapters, you’d be the one I reread.
-        </p>
-
-        <p>
-        And if this little message finds the right place in your heart…<br>
-        Will you be my Valentine? 💖
-        </p>
-
-        <p>
-        No pressure.<br>
-        No drama.<br>
-        Just honest feelings.
-        </p>
-
-        <p style="text-align:right;">
-        – Ganthishree ✨
-        </p>
-
-        </div>
-      `;
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #ffe6f0;
+      padding: 20px;
     }
 
-  } else {
-    let reaction = document.getElementById("reaction");
-    reaction.innerText = "😤 Wrong answer! Think properly mister!";
-    reaction.classList.add("shake");
-    setTimeout(() => reaction.classList.remove("shake"), 400);
+    #quiz {
+      margin-top: 50px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff4d88;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e6005c;
+    }
+
+    #reaction {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Answer these honestly 😌</h1>
+
+<div id="quiz"></div>
+<div id="reaction"></div>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const questions = [
+    {
+      question: "Do you like surprises? 😏",
+      options: ["Yes", "No"],
+      answer: "Yes"
+    },
+    {
+      question: "Do you enjoy talking to me? 😌",
+      options: ["Yes", "No"],
+      answer: "Yes"
+    },
+    {
+      question: "Should I ask something important now? 💖",
+      options: ["Yes", "No"],
+      answer: "Yes"
+    }
+  ];
+
+  let currentQuestion = 0;
+
+  function loadQuestion() {
+    let q = questions[currentQuestion];
+
+    let html = `
+      <h2>${q.question}</h2>
+      ${q.options.map(option =>
+        `<button onclick="checkAnswer('${option}')">${option}</button>`
+      ).join("")}
+    `;
+
+    document.getElementById("quiz").innerHTML = html;
+    document.getElementById("reaction").innerText = "";
   }
-}
+
+  function checkAnswer(selected) {
+    let correct = questions[currentQuestion].answer;
+
+    if (selected === correct) {
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+
+        // 🎵 Play music on final page
+        let music = document.getElementById("bgMusic");
+        music.play().catch(() => {
+          document.body.addEventListener("click", () => music.play(), { once: true });
+        });
+
+        // 💌 Final Romantic Letter
+        document.getElementById("quiz").innerHTML = `
+          <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
+            
+            <h2 style="text-align:center;">Hey You ❤️</h2>
+
+            <p>
+            I don’t know if this email will surprise you… or make you smile… but I hope it does both.
+            </p>
+
+            <p>
+            Some people enter our life loudly.<br>
+            Some enter silently… and slowly become the reason behind random smiles.
+            </p>
+
+            <p>
+            You’re that “random smile” for me.
+            </p>
+
+            <p>
+            It’s funny how normal conversations turned into something I wait for.<br>
+            How simple “hi” became the best part of my day.<br>
+            How your name on my screen suddenly feels… special.
+            </p>
+
+            <p>
+            So here I am, doing something a little brave.
+            </p>
+
+            <p>
+            If life was a playlist, I think you’d be my favorite song.<br>
+            If days were chapters, you’d be the one I reread.
+            </p>
+
+            <p>
+            And if this little message finds the right place in your heart…<br>
+            Will you be my Valentine? 💖
+            </p>
+
+            <p>
+            No pressure.<br>
+            No drama.<br>
+            Just honest feelings.
+            </p>
+
+            <p style="text-align:right;">
+            – Ganthishree ✨
+            </p>
+
+          </div>
+        `;
+      }
+
+    } else {
+      let reaction = document.getElementById("reaction");
+      reaction.innerText = "😤 Wrong answer! Think properly mister!";
+      reaction.classList.add("shake");
+      setTimeout(() => reaction.classList.remove("shake"), 400);
+    }
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
