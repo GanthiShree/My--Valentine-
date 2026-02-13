@@ -89,4 +89,45 @@
   }
 
   function checkAnswer(selected) {
-    let correct
+    let correct = questions[currentQuestion].answer;
+
+    if (selected === correct) {
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        showFinalMessage();
+      }
+
+    } else {
+      let reaction = document.getElementById("reaction");
+      reaction.innerText = "😤 Wrong answer! Think properly mister!";
+      reaction.classList.add("shake");
+      setTimeout(() => reaction.classList.remove("shake"), 400);
+    }
+  }
+
+  function showFinalMessage() {
+    document.getElementById("quiz").innerHTML = `
+      <div style="max-width:600px; margin:auto; padding:20px; text-align:left; font-size:18px; line-height:1.6; color:#cc0066;">
+        <h2 style="text-align:center;">Hey You ❤️</h2>
+
+        <p>I don’t know if this message will surprise you… or make you smile… but I hope it does both.</p>
+
+        <p>You’re that “random smile” for me.</p>
+
+        <p>So here I am, doing something a little brave.</p>
+
+        <p>Will you be my Valentine? 💖</p>
+
+        <p style="text-align:right;">– Ganthishree ✨</p>
+      </div>
+    `;
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
